@@ -7,19 +7,15 @@ public class BlackHole implements VisualObject {
     private int height;
     private int cordY;
     private int cordX;
-    private Random random;
-    private BallTask ballTask;
     private Rectangle rect;
     private Color color;
     private Ball ball;
 
-    public BlackHole(BallTask ballTask) {
-        this.ballTask = ballTask;
-        this.random = new Random();
-        this.width = 500;
-        this.height = 200;
-        this.cordY = this.random.nextInt(this.ballTask.getHeight() - (this.height * 2));
-        this.cordX = this.random.nextInt(this.ballTask.getWidth() - (this.width * 2));
+    public BlackHole(BallTask ballTask,int cordY,int cordX,int width,int height) {
+        this.width =width;
+        this.height = height;
+        this.cordY = cordY;
+        this.cordX = cordX;
         this.rect = new Rectangle(width, height);
         this.rect.setBounds(this.cordX, this.cordY, width, height);
         this.color = Color.white;
@@ -27,6 +23,38 @@ public class BlackHole implements VisualObject {
 
     public Rectangle getRect() {
         return rect;
+    }
+
+    public int getCordY() {
+        return cordY;
+    }
+
+    public void setCordY(int cordY) {
+        this.cordY = cordY;
+    }
+
+    public int getCordX() {
+        return cordX;
+    }
+
+    public void setCordX(int cordX) {
+        this.cordX = cordX;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
     }
 
     public void setColor(Color color) {
@@ -52,7 +80,6 @@ public class BlackHole implements VisualObject {
             }
         }
         this.ball = ball;
-        ball.setBorderColor(new Color(255,0,0));
         ball.setSleepTime(50);
         ball.setOutSide(false);
         notifyAll();
@@ -63,9 +90,8 @@ public class BlackHole implements VisualObject {
         if (this.ball != null) {
             if (ball.equals(this.ball)) {
                 this.ball = null;
-                ball.setBorderColor(ball.getColor());
                 ball.setOutSide(true);
-                ball.setSleepTime(1);
+                ball.setSleepTime(10);
                 notifyAll();
             }
         }

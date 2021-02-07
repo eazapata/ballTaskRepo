@@ -40,12 +40,12 @@ public class BallTask extends JFrame {
     /**
      * Consctructor con parámetros.
      */
-    public BallTask() {
+    public BallTask(String ip) {
         this.setTitle("Original");
         this.channel = new Channel(this);
 
         this.serverConnection = new ServerConnection(this.channel);
-        this.clientConnection = new ClientConnection(this.channel);
+        this.clientConnection = new ClientConnection(this.channel, ip);
         this.dimension = getToolkit().getScreenSize();
         this.setSize(dimension.width, dimension.height);
         this.setVisible(true);
@@ -64,7 +64,11 @@ public class BallTask extends JFrame {
 
     public static void main(String[] args) {
 
-        BallTask ballTask = new BallTask();
+        String remoteIp = null;
+        while (remoteIp == null) {
+            remoteIp = JOptionPane.showInputDialog("Introduce remote ip: ");
+        }
+        BallTask ballTask = new BallTask(remoteIp);
     }
 
     //MÉTODOS PÚBLICOS
@@ -95,6 +99,20 @@ public class BallTask extends JFrame {
     public void addNewBall(Ball ball) {
         this.balls.add(ball);
 
+    }
+
+    /**
+     * Métdo que recibe dos enteros y cácula un valor aleatorio entre estos
+     *
+     * @param min valor mínimo asignable
+     * @param max valor máximo asignable
+     * @return el valor aleatorio calculado
+     */
+    public int generateRandomInt(int min, int max) {
+
+        int randomValue = (int) Math.floor(Math.random() * (max - min + 1) + min);
+
+        return randomValue;
     }
 
     public void removeBall(Ball ball) {
@@ -153,25 +171,17 @@ public class BallTask extends JFrame {
 
     private void createBlackHoles() {
         this.blackHoles = new ArrayList<BlackHole>();
-        for (int i = 0; i < 2; i++) {
-            BlackHole blackHole = new BlackHole(this);
-            blackHoles.add(blackHole);
-        }
+        BlackHole blackHole = new BlackHole(this, this.getHeight() / 4, this.getWidth() / 4,
+                400, 175);
+        BlackHole blackHole1 = new BlackHole(this, this.getHeight() / 2, this.getWidth() / 2,
+                400, 175);
+        blackHoles.add(blackHole);
+        blackHoles.add(blackHole1);
         this.viewer.setBlackHoles(this.blackHoles);
     }
 
-    private void setRandomPosition(){
-        Random random = new Random();
-        int height = random.nextInt(this.getHeight() - 200);
-        int width = random.nextInt(this.getWidth() - 500);
-    }
-
-
-
-
-
-
 }
+
 
 
 

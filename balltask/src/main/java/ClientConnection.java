@@ -5,15 +5,16 @@ import java.net.Socket;
 public class ClientConnection implements Runnable {
 
 
-    private String ip = "192.168.0.11";
+    private String ip; //= "192.168.0.11";
     private int port = 9999;
     private Channel channel;
     private boolean running = true;
 
     //CONSTRUCTOR
 
-    public ClientConnection(Channel channel) {
+    public ClientConnection(Channel channel,String ip) {
         this.channel = channel;
+        this.ip = ip;
         Thread clientThread = new Thread(this);
         clientThread.start();
     }

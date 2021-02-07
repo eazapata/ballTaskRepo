@@ -13,9 +13,7 @@ public class Ball implements Runnable, VisualObject, Serializable {
     private boolean outSide;
     private boolean stopped;
     private BallTask ballTask;
-    private Random random;
     private Color color;
-    private Color borderColor;
     private int sleepTime;
     private Rectangle rect;
     private int size;
@@ -26,17 +24,17 @@ public class Ball implements Runnable, VisualObject, Serializable {
     }
 
     public Ball(BallTask ballTask, Channel channel) {
-        this.random = new Random();
         this.ballTask = ballTask;
-        this.size = this.random.nextInt(150) + 30;
+        this.size = this.ballTask.generateRandomInt(30,150) ;
         this.outSide = true;
-        this.color = new Color(255);
-        this.borderColor = new Color(0);
-        this.cordY = this.random.nextInt(this.ballTask.getHeight() - (this.size * 3));
-        this.cordX = this.random.nextInt(this.ballTask.getWidth() - (this.size * 4));
+        this.color = new Color(this.ballTask.generateRandomInt(10,255),
+                this.ballTask.generateRandomInt(10,255),
+                this.ballTask.generateRandomInt(10,255));
+        this.cordY = this.ballTask.generateRandomInt(0,this.ballTask.getHeight() - (this.size * 3));
+        this.cordX = this.ballTask.generateRandomInt(0,this.ballTask.getWidth() - (this.size * 3));
         this.velY = 1;
         this.velX = 1;
-        this.sleepTime = 20;
+        this.sleepTime = 10;
         this.stopped = false;
         this.channel = channel;
         this.rect = new Rectangle(this.size, this.size);
@@ -132,9 +130,6 @@ public class Ball implements Runnable, VisualObject, Serializable {
         this.color = color;
     }
 
-    public void setBorderColor(Color borderColor) {
-        this.borderColor = borderColor;
-    }
 
     /**
      * Método para mover la bola, recibe la acción que le dice que hacer a la pelota
@@ -182,7 +177,7 @@ public class Ball implements Runnable, VisualObject, Serializable {
     public void paint(Graphics g) {
         if(running){
 
-            g.setColor(this.borderColor);
+            g.setColor(this.color);
             g.fillOval(this.cordX, this.cordY, this.size, this.size);
         }
     }
@@ -198,4 +193,7 @@ public class Ball implements Runnable, VisualObject, Serializable {
             }
         }
     }
+
+    //Métodos privados
+
 }

@@ -73,7 +73,6 @@ public class Channel implements Runnable {
         ball.setSize(Integer.parseInt(info[1]));
         ball.setOutSide(true);
         ball.setColor(new Color(0, 255, 0));
-        ball.setBorderColor(new Color(0));
         ball.setCordY(Integer.parseInt(info[4]));
         ball.setCordX(0);
         ball.setVelX(Integer.parseInt(info[2]));
@@ -81,6 +80,7 @@ public class Channel implements Runnable {
         ball.setSleepTime(20);
         ball.setStopped(false);
         ball.setChannel(this);
+        ball.setColor(new Color(Integer.parseInt(info[6]),Integer.parseInt(info[7]),Integer.parseInt(info[8])));
         ball.setRect(new Rectangle(ball.getSize(), ball.getSize()));
         ball.getRect().setBounds(ball.getCordX(), ball.getCordY(), ball.getSize(), ball.getSize());
         ball.setBallThread(new Thread(ball));
@@ -113,7 +113,10 @@ public class Channel implements Runnable {
                     ball.getVelX() + "," +
                     ball.getVelY() + "," +
                     ball.getCordY() + "," +
-                    ball.getCordX() + "\n";
+                    ball.getCordX() + "," +
+                    ball.getColor().getRed()+ "," +
+                    ball.getColor().getGreen() + ","+
+                    ball.getColor().getBlue() +"\n";
             writer.writeUTF(ballInfo);
             this.ballTask.removeBall(ball);
         } catch (IOException e) {
