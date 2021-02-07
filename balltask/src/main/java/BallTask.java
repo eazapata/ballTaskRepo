@@ -10,31 +10,31 @@ public class BallTask extends JFrame {
     private ControlPanel controlPanel;
     private ArrayList<Ball> balls;
     private ArrayList<BlackHole> blackHoles;
-    private ArrayList<Ball> toRemove = new ArrayList<Ball>();
-    private ArrayList<Ball> toAdd = new ArrayList<Ball>();
     private Dimension dimension;
     private Statistics statistics;
     private Channel channel;
     private ServerConnection serverConnection;
     private ClientConnection clientConnection;
+    private String window;
 
     //GETTERS Y SETTERS
     //------------------------------------------------------------------------
 
-    public ArrayList<Ball> getToRemove() {
-        return toRemove;
+
+    public ArrayList<Ball> getBalls() {
+        return balls;
     }
 
-    public void setToRemove(ArrayList<Ball> toRemove) {
-        this.toRemove = toRemove;
+    public ArrayList<BlackHole> getBlackHoles() {
+        return blackHoles;
     }
 
-    public ArrayList<Ball> getToAdd() {
-        return toAdd;
+    public String getWindow() {
+        return window;
     }
 
-    public void setToAdd(ArrayList<Ball> toAdd) {
-        this.toAdd = toAdd;
+    public void setWindow(String window) {
+        this.window = window;
     }
 
     /**
@@ -43,20 +43,22 @@ public class BallTask extends JFrame {
     public BallTask(String ip) {
         this.setTitle("Original");
         this.channel = new Channel(this);
+        this.serverConnection = new ServerConnection(this.channel,this);
+        this.clientConnection = new ClientConnection(this.channel, ip,this);
 
-        this.serverConnection = new ServerConnection(this.channel);
-        this.clientConnection = new ClientConnection(this.channel, ip);
         this.dimension = getToolkit().getScreenSize();
         this.setSize(dimension.width, dimension.height);
         this.setVisible(true);
         this.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+
         this.statistics = new Statistics();
         this.viewer = new Viewer(dimension.width, dimension.height, this);
         createBlackHoles();
-        this.balls = createBalls();
+        createBalls();
         this.viewer.setBalls(this.balls);
+
         this.addControlPanel(c);
         this.addViewer(c);
         this.pack();
@@ -98,6 +100,7 @@ public class BallTask extends JFrame {
 
     /**
      * Método que recibe una pelota y la añade a la lista, tras esto actualiza las estadisticas.
+     *
      * @param ball objeto pelota que añadiremos a la lista
      */
     public void addNewBall(Ball ball) {
@@ -122,6 +125,7 @@ public class BallTask extends JFrame {
 
     /**
      * Método que usamos para eliminar una pelota de la lista y actualizar las estadisdisticas
+     *
      * @param ball
      */
     public void removeBall(Ball ball) {
@@ -133,7 +137,7 @@ public class BallTask extends JFrame {
     //MÉTODOS PRIVADOS
 
     private void addControlPanel(GridBagConstraints c) {
-        this.controlPanel = new ControlPanel(statistics, balls);
+        this.controlPanel = new ControlPanel(this, statistics);
         c.anchor = GridBagConstraints.FIRST_LINE_START;
         c.fill = GridBagConstraints.VERTICAL;
         c.gridy = 0;
@@ -169,22 +173,22 @@ public class BallTask extends JFrame {
         }
     }
 
-    private ArrayList<Ball> createBalls() {
-        ArrayList<Ball> balls = new ArrayList<Ball>();
+    public void createBalls() {
+        balls = new ArrayList<Ball>();
         for (int i = 0; i < 10; i++) {
             Ball ball = new Ball(this, this.channel);
             balls.add(ball);
             this.statistics.setBall();
         }
-        return balls;
+       this.viewer.setBalls(balls);
     }
 
-    private void createBlackHoles() {
+    public void createBlackHoles() {
         this.blackHoles = new ArrayList<BlackHole>();
-        BlackHole blackHole = new BlackHole(this, this.getHeight() / 4, this.getWidth() / 4,
-                400, 175,this.statistics);
-        BlackHole blackHole1 = new BlackHole(this, this.getHeight() / 2, this.getWidth() / 2,
-                400, 175,this.statistics);
+        BlackHole blackHole = new BlackHole(this, this.getHeight() / 4 - 175, this.getWidth() / 4,
+                400, 175, this.statistics);
+        BlackHole blackHole1 = new BlackHole(this, this.getHeight() / 2, this.getWidth() / 2 -200,
+                400, 175, this.statistics);
         blackHoles.add(blackHole);
         blackHoles.add(blackHole1);
         this.viewer.setBlackHoles(this.blackHoles);

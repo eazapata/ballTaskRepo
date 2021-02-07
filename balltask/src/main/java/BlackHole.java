@@ -12,8 +12,8 @@ public class BlackHole implements VisualObject {
     private Ball ball;
     private Statistics statistics;
 
-    public BlackHole(BallTask ballTask,int cordY,int cordX,int width,int height,Statistics statistics) {
-        this.width =width;
+    public BlackHole(BallTask ballTask, int cordY, int cordX, int width, int height, Statistics statistics) {
+        this.width = width;
         this.height = height;
         this.cordY = cordY;
         this.cordX = cordX;
@@ -27,40 +27,12 @@ public class BlackHole implements VisualObject {
         return rect;
     }
 
-    public int getCordY() {
-        return cordY;
+    public Ball getBall() {
+        return ball;
     }
 
-    public void setCordY(int cordY) {
-        this.cordY = cordY;
-    }
-
-    public int getCordX() {
-        return cordX;
-    }
-
-    public void setCordX(int cordX) {
-        this.cordX = cordX;
-    }
-
-    public int getWidth() {
-        return width;
-    }
-
-    public void setWidth(int width) {
-        this.width = width;
-    }
-
-    public int getHeight() {
-        return height;
-    }
-
-    public void setHeight(int height) {
-        this.height = height;
-    }
-
-    public void setColor(Color color) {
-        this.color = color;
+    public void setBall(Ball ball) {
+        this.ball = ball;
     }
 
     public void paint(Graphics g) {
@@ -68,7 +40,6 @@ public class BlackHole implements VisualObject {
         g.fillRect(this.cordX, this.cordY, width, height);
 
     }
-
 
 
     //Metodo para añadir una pelota

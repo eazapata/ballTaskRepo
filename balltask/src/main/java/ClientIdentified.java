@@ -9,14 +9,16 @@ public class ClientIdentified implements Runnable {
     private Channel channel;
     private Thread identifiedThread;
     private boolean clientIdentified;
+    private BallTask ballTask;
 
     public Thread getIdentifiedThread() {
         return identifiedThread;
     }
 
-    public ClientIdentified(Socket socket, Channel channel) {
+    public ClientIdentified(Socket socket, Channel channel,BallTask ballTask) {
         this.socket = socket;
         this.channel = channel;
+        this.ballTask = ballTask;
         identifiedThread = new Thread(this);
     }
 
@@ -33,6 +35,7 @@ public class ClientIdentified implements Runnable {
                 if (header.equals("BALLTASK")) {
                     System.out.println("Server: Setting ");
                     this.channel.setSocket(this.socket);
+                    this.ballTask.setWindow("Server");
 
                     DataOutputStream out = new DataOutputStream(this.socket.getOutputStream());
                     out.writeUTF("OK");

@@ -20,18 +20,18 @@ public class Ball implements Runnable, VisualObject, Serializable {
     private boolean running;
     private Channel channel;
 
-    public Ball(){
+    public Ball() {
     }
 
     public Ball(BallTask ballTask, Channel channel) {
         this.ballTask = ballTask;
-        this.size = this.ballTask.generateRandomInt(30,150) ;
+        this.size = this.ballTask.generateRandomInt(30, 150);
         this.outSide = true;
-        this.color = new Color(this.ballTask.generateRandomInt(10,255),
-                this.ballTask.generateRandomInt(10,255),
-                this.ballTask.generateRandomInt(10,255));
-        this.cordY = this.ballTask.generateRandomInt(0,this.ballTask.getHeight() - (this.size * 3));
-        this.cordX = this.ballTask.generateRandomInt(0,this.ballTask.getWidth() - (this.size * 3));
+        this.color = new Color(this.ballTask.generateRandomInt(10, 255),
+                this.ballTask.generateRandomInt(10, 255),
+                this.ballTask.generateRandomInt(10, 255));
+        this.cordY = this.ballTask.generateRandomInt(0, this.ballTask.getHeight() - (this.size * 3));
+        this.cordX = this.ballTask.generateRandomInt(0, this.ballTask.getWidth() - (this.size * 3));
         this.velY = 1;
         this.velX = 1;
         this.sleepTime = 10;
@@ -130,6 +130,18 @@ public class Ball implements Runnable, VisualObject, Serializable {
         this.color = color;
     }
 
+    public boolean isRunning() {
+        return running;
+    }
+
+    public void setRunning(boolean running) {
+        this.running = running;
+    }
+
+
+    public boolean isStopped() {
+        return stopped;
+    }
 
     /**
      * Método para mover la bola, recibe la acción que le dice que hacer a la pelota
@@ -139,35 +151,26 @@ public class Ball implements Runnable, VisualObject, Serializable {
         int absY = Math.abs(this.getVelY());
 
         if (!this.stopped) {
-            if (action.equals("right") && (this.channel.isOk())) {
-                this.running= false;
-                System.out.println("enviando pelota "+this.channel.isOk());
+            if (action.equals("right") && (this.channel.isOk()) && this.ballTask.getWindow().equals("server")) {
+                this.running = false;
+                System.out.println("enviando pelota " + this.channel.isOk());
+                this.channel.send(this);
+            } else if (action.equals("left") && (this.channel.isOk()) && this.ballTask.getWindow().equals("client")) {
+                this.running = false;
+                System.out.println("enviando pelota " + this.channel.isOk());
                 this.channel.send(this);
             } else if (action.equals("left")) {
                 this.setVelX(absX);
-                this.rect.setBounds(this.cordX, this.cordY, this.size, this.size);
-                cordX = cordX + velX;
-                cordY = cordY + velY;
             } else if (action.equals("right")) {
                 this.setVelX(-absX);
-                this.rect.setBounds(this.cordX, this.cordY, this.size, this.size);
-                cordX = cordX + velX;
-                cordY = cordY + velY;
             } else if (action.equals("up")) {
                 this.setVelY(absY);
-                this.rect.setBounds(this.cordX, this.cordY, this.size, this.size);
-                cordX = cordX + velX;
-                cordY = cordY + velY;
             } else if (action.equals("down")) {
                 this.setVelY(-absY);
-                this.rect.setBounds(this.cordX, this.cordY, this.size, this.size);
-                cordX = cordX + velX;
-                cordY = cordY + velY;
-            }else{
-                this.rect.setBounds(this.cordX, this.cordY, this.size, this.size);
-                cordX = cordX + velX;
-                cordY = cordY + velY;
             }
+            this.rect.setBounds(this.cordX, this.cordY, this.size, this.size);
+            cordX = cordX + velX;
+            cordY = cordY + velY;
         }
     }
 
@@ -175,7 +178,7 @@ public class Ball implements Runnable, VisualObject, Serializable {
      * Método para pintar la bola. Recibe el graphics del viewer
      */
     public void paint(Graphics g) {
-        if(running){
+        if (running) {
 
             g.setColor(this.color);
             g.fillOval(this.cordX, this.cordY, this.size, this.size);
@@ -193,7 +196,5 @@ public class Ball implements Runnable, VisualObject, Serializable {
             }
         }
     }
-
-    //Métodos privados
 
 }

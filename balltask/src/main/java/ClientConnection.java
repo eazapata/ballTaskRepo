@@ -5,16 +5,18 @@ import java.net.Socket;
 public class ClientConnection implements Runnable {
 
 
-    private String ip; //= "192.168.0.11";
+    private String ip;
     private int port = 9999;
     private Channel channel;
     private boolean running = true;
+    private BallTask ballTask;
 
     //CONSTRUCTOR
 
-    public ClientConnection(Channel channel,String ip) {
+    public ClientConnection(Channel channel,String ip, BallTask ballTask) {
         this.channel = channel;
         this.ip = ip;
+        this.ballTask = ballTask;
         Thread clientThread = new Thread(this);
         clientThread.start();
     }
@@ -34,6 +36,7 @@ public class ClientConnection implements Runnable {
                 String response = in.readUTF();
                 if (!this.channel.isOk() && response.equals("OK")) {
                     this.channel.setSocket(socket);
+                    this.ballTask.setWindow("client");
                     System.out.println("Conexion establecida");
                 }
           }

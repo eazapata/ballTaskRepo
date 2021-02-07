@@ -2,19 +2,18 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 public class ControlPanel extends JPanel implements Runnable, ActionListener {
 
     private JTable statisticsTable;
     private Thread threadControlPanel;
-    private JToggleButton play, pause, reset;
+    private JButton play, pause, reset;
     private Statistics statistics;
-    private ArrayList<Ball> ballList;
+    private BallTask ballTask;
 
-    public ControlPanel(Statistics statistics, ArrayList balls) {
+    public ControlPanel(BallTask ballTask, Statistics statistics) {
         this.statistics = statistics;
-        this.ballList = balls;
+        this.ballTask = ballTask;
         this.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
         this.createPane(c);
@@ -26,7 +25,7 @@ public class ControlPanel extends JPanel implements Runnable, ActionListener {
     public void createPane(GridBagConstraints c) {
 
 
-        this.play = new JToggleButton("Play");
+        this.play = new JButton("Play");
         this.play.addActionListener(this);
         c.fill = GridBagConstraints.HORIZONTAL;
         c.weightx = 1.5;
@@ -37,7 +36,7 @@ public class ControlPanel extends JPanel implements Runnable, ActionListener {
         c.insets = new Insets(0, 10, 0, 0);
         this.add(this.play, c);
 
-        this.pause = new JToggleButton("Pause");
+        this.pause = new JButton("Pause");
         this.pause.addActionListener(this);
         c.fill = GridBagConstraints.BOTH;
         c.weightx = 0.5;
@@ -45,7 +44,7 @@ public class ControlPanel extends JPanel implements Runnable, ActionListener {
         c.gridy = 1;
         this.add(this.pause, c);
 
-        this.reset = new JToggleButton("Reset");
+        this.reset = new JButton("Reset");
         this.reset.addActionListener(this);
         c.fill = GridBagConstraints.BOTH;
         c.weightx = 0.5;
@@ -68,6 +67,7 @@ public class ControlPanel extends JPanel implements Runnable, ActionListener {
         if (event.equals("Reset")) {
             this.play.setSelected(false);
             this.pause.setSelected(false);
+            resetBalls();
         }
         if (event.equals("Pause")) {
             this.play.setSelected(false);
@@ -97,16 +97,14 @@ public class ControlPanel extends JPanel implements Runnable, ActionListener {
     }
 
     private void pauseBalls() {
-        for (int i = 0; i < this.ballList.size(); i++) {
-            this.ballList.get(i).setStopped(true);
+        for (int i = 0; i < this.ballTask.getBalls().size(); i++) {
+            this.ballTask.getBalls().get(i).setStopped(true);
         }
     }
 
     private void playBalls() {
-        for (int i = 0; i < this.ballList.size(); i++) {
-            if (this.ballList.get(i).isOutSide()) {
-                this.ballList.get(i).setStopped(false);
-            }
+        for (int i = 0; i < this.ballTask.getBalls().size(); i++) {
+            this.ballTask.getBalls().get(i).setStopped(false);
         }
     }
 
@@ -114,7 +112,24 @@ public class ControlPanel extends JPanel implements Runnable, ActionListener {
         this.statisticsTable.setValueAt(statistics.getTotalBalls(), 0, 1);
         this.statisticsTable.setValueAt(statistics.getTotalBalls() - statistics.getInsideBH(), 1, 1);
         this.statisticsTable.setValueAt(statistics.getInsideBH(), 2, 1);
-        this.statisticsTable.setValueAt(statistics.getPausedBalls(),3,1);
+        int count = 0;
+        for (int i = 0; i < this.ballTask.getBalls().size(); i++) {
+            if (this.ballTask.getBalls().get(i).isStopped()) {
+                count += 0;
+            }
+        }
+        this.statisticsTable.setValueAt(count, 3, 1);
+    }
+
+    private void resetBalls() {
+        for (int i = 0; i < this.ballTask.getBalls().size(); i++) {
+            this.ballTask.getBalls().get(i).setRunning(false);
+        }
+        this.ballTask.getBalls().clear();
+        this.ballTask.getBlackHoles().clear();
+        this.statistics.resetStatistics();
+        this.ballTask.createBlackHoles();
+        this.ballTask.createBalls();
     }
 
     public void run() {

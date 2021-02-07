@@ -1,9 +1,8 @@
 public class Statistics {
 
     private int totalBalls;
-    private int pausedBalls;
     private int insideBH;
-    private int outsideBH;
+    private int waitingBalls;
 
     public void setBall() {
         this.totalBalls += 1;
@@ -15,11 +14,12 @@ public class Statistics {
 
     }
 
+    public void setWaitingBalls(){
+        this.waitingBalls +=1;
+    }
 
-
-    public void setPausedBalls() {
-        this.pausedBalls++;
-
+    public void setTotal(int total){
+        this.totalBalls = total;
     }
 
     public int getTotalBalls() {
@@ -27,9 +27,8 @@ public class Statistics {
         return this.totalBalls;
     }
 
-    public int getPausedBalls() {
-
-        return this.pausedBalls;
+    public int getWaitingBalls() {
+        return waitingBalls;
     }
 
     public int getInsideBH() {
@@ -43,6 +42,16 @@ public class Statistics {
 
     public void removeFromBlackHole(){
         this.insideBH -= 1;
+    }
+
+    public void removeWaitingBalls(){
+        this.waitingBalls -=1;
+    }
+
+    public void resetStatistics(){
+        this.totalBalls = 0;
+        this.waitingBalls = 0;
+        this.insideBH = 0;
     }
 
 }

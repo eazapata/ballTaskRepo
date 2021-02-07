@@ -1,10 +1,9 @@
 
 
-import javax.xml.crypto.Data;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
+
 
 public class ServerConnection implements Runnable {
 
@@ -16,13 +15,14 @@ public class ServerConnection implements Runnable {
     private ServerSocket serverSocket;
     private boolean running = true;
 
-    public ServerConnection(Channel channel) {
+    public ServerConnection(Channel channel,BallTask ballTask) {
 
         try {
             this.serverSocket = new ServerSocket(this.port);
         } catch (IOException e) {
             e.printStackTrace();
         }
+        this.ballTask = ballTask;
         this.channel = channel;
         this.serverThread = new Thread(this);
         this.serverThread.start();
@@ -37,7 +37,7 @@ public class ServerConnection implements Runnable {
                 this.socket = serverSocket.accept();
                     String clientAddress = this.socket.getInetAddress().getHostAddress();
                     System.out.println("New connection from: " + clientAddress);
-                    ClientIdentified clientIdentified = new ClientIdentified(this.socket, this.channel);
+                    ClientIdentified clientIdentified = new ClientIdentified(this.socket, this.channel,this.ballTask);
                     clientIdentified.getIdentifiedThread().start();
                 }
 
