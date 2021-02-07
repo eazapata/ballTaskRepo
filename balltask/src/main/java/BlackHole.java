@@ -10,8 +10,9 @@ public class BlackHole implements VisualObject {
     private Rectangle rect;
     private Color color;
     private Ball ball;
+    private Statistics statistics;
 
-    public BlackHole(BallTask ballTask,int cordY,int cordX,int width,int height) {
+    public BlackHole(BallTask ballTask,int cordY,int cordX,int width,int height,Statistics statistics) {
         this.width =width;
         this.height = height;
         this.cordY = cordY;
@@ -19,6 +20,7 @@ public class BlackHole implements VisualObject {
         this.rect = new Rectangle(width, height);
         this.rect.setBounds(this.cordX, this.cordY, width, height);
         this.color = Color.white;
+        this.statistics = statistics;
     }
 
     public Rectangle getRect() {
@@ -80,6 +82,7 @@ public class BlackHole implements VisualObject {
             }
         }
         this.ball = ball;
+        this.statistics.setInsideBH();
         ball.setSleepTime(50);
         ball.setOutSide(false);
         notifyAll();
@@ -92,6 +95,7 @@ public class BlackHole implements VisualObject {
                 this.ball = null;
                 ball.setOutSide(true);
                 ball.setSleepTime(10);
+                this.statistics.removeFromBlackHole();
                 notifyAll();
             }
         }

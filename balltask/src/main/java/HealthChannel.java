@@ -1,14 +1,10 @@
-import sun.font.TextRecord;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
 public class HealthChannel implements Runnable {
 
     private Channel channel;
-    private Thread healthThread;
     private boolean health;
     private Socket socket;
 
@@ -36,7 +32,7 @@ public class HealthChannel implements Runnable {
             while (i < 5 && !this.health) {
                 i++;
                 try {
-                    Thread.sleep(50);
+                    Thread.sleep(100);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

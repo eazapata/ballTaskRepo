@@ -10,24 +10,26 @@ public class Statistics {
 
     }
 
-    public int getTotalBalls() {
+    public void setInsideBH() {
+        this.insideBH += 1;
 
-        return this.totalBalls;
     }
+
+
 
     public void setPausedBalls() {
         this.pausedBalls++;
 
     }
 
+    public int getTotalBalls() {
+
+        return this.totalBalls;
+    }
+
     public int getPausedBalls() {
 
         return this.pausedBalls;
-    }
-
-    public void setInsideBH() {
-        this.insideBH += 1;
-
     }
 
     public int getInsideBH() {
@@ -36,7 +38,11 @@ public class Statistics {
     }
 
     public void removeBall(){
-        this.insideBH -=1;
+        this.totalBalls -=1;
+    }
+
+    public void removeFromBlackHole(){
+        this.insideBH -= 1;
     }
 
 }

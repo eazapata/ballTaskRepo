@@ -8,7 +8,7 @@ public class ControlPanel extends JPanel implements Runnable, ActionListener {
 
     private JTable statisticsTable;
     private Thread threadControlPanel;
-    private JToggleButton play, pause, stop;
+    private JToggleButton play, pause, reset;
     private Statistics statistics;
     private ArrayList<Ball> ballList;
 
@@ -34,7 +34,7 @@ public class ControlPanel extends JPanel implements Runnable, ActionListener {
         c.gridy = 0;
         c.gridwidth = 2;
         c.ipadx = 150;
-        c. insets = new Insets(0,10,0,0);
+        c.insets = new Insets(0, 10, 0, 0);
         this.add(this.play, c);
 
         this.pause = new JToggleButton("Pause");
@@ -45,15 +45,15 @@ public class ControlPanel extends JPanel implements Runnable, ActionListener {
         c.gridy = 1;
         this.add(this.pause, c);
 
-        this.stop = new JToggleButton("Stop");
-        this.stop.addActionListener(this);
+        this.reset = new JToggleButton("Reset");
+        this.reset.addActionListener(this);
         c.fill = GridBagConstraints.BOTH;
         c.weightx = 0.5;
         c.gridx = 0;
         c.gridy = 2;
-        this.add(this.stop, c);
+        this.add(this.reset, c);
 
-       addTableContent(c);
+        addTableContent(c);
 
     }
 
@@ -61,17 +61,17 @@ public class ControlPanel extends JPanel implements Runnable, ActionListener {
 
         String event = actionEvent.getActionCommand();
         if (event.equals("Play")) {
-            this.stop.setSelected(false);
+            this.reset.setSelected(false);
             this.pause.setSelected(false);
             playBalls();
         }
-        if (event.equals("Stop")) {
+        if (event.equals("Reset")) {
             this.play.setSelected(false);
             this.pause.setSelected(false);
         }
         if (event.equals("Pause")) {
             this.play.setSelected(false);
-            this.stop.setSelected(false);
+            this.reset.setSelected(false);
             pauseBalls();
         }
     }
@@ -80,41 +80,45 @@ public class ControlPanel extends JPanel implements Runnable, ActionListener {
 
         this.statisticsTable = new JTable(4, 2);
         this.statisticsTable.setValueAt("Total: ", 0, 0);
-        this.statisticsTable.setValueAt("Balls Inside", 1, 0);
-        this.statisticsTable.setValueAt("Balls Waiting", 2, 0);
+        this.statisticsTable.setValueAt("Balls outside blackhole: ", 1, 0);
+        this.statisticsTable.setValueAt("Balls inside blackhole: ", 2, 0);
+        this.statisticsTable.setValueAt("Balls waiting: ", 3, 0);
         this.statisticsTable.setVisible(true);
         c.gridx = 1;
         c.gridy = 3;
         c.gridwidth = 2;
-        c.insets = new Insets(20,10,0,0);
+        c.insets = new Insets(20, 10, 0, 0);
         this.statisticsTable.getTableHeader().setVisible(true);
         this.add(this.statisticsTable.getTableHeader(), c);
         c.gridy = 4;
         c.gridheight = 4;
-        c.insets = new Insets(0,10,0,0);
+        c.insets = new Insets(0, 10, 0, 0);
         this.add(this.statisticsTable, c);
     }
 
     private void pauseBalls() {
-        for (Ball ball : this.ballList) {
-            ball.setStopped(true);
+        for (int i = 0; i < this.ballList.size(); i++) {
+            this.ballList.get(i).setStopped(true);
         }
     }
 
     private void playBalls() {
-        for (Ball ball : this.ballList) {
-            ball.setStopped(false);
+        for (int i = 0; i < this.ballList.size(); i++) {
+            if (this.ballList.get(i).isOutSide()) {
+                this.ballList.get(i).setStopped(false);
+            }
         }
     }
 
-    private void refreshStats(){
-        this.statisticsTable.setValueAt(statistics.getTotalBalls(),0,1);
-        this.statisticsTable.setValueAt(statistics.getInsideBH(),1,1);
-        this.statisticsTable.setValueAt(statistics.getPausedBalls(),2,1);
+    private void refreshStats() {
+        this.statisticsTable.setValueAt(statistics.getTotalBalls(), 0, 1);
+        this.statisticsTable.setValueAt(statistics.getTotalBalls() - statistics.getInsideBH(), 1, 1);
+        this.statisticsTable.setValueAt(statistics.getInsideBH(), 2, 1);
+        this.statisticsTable.setValueAt(statistics.getPausedBalls(),3,1);
     }
 
     public void run() {
-        while (true){
+        while (true) {
             refreshStats();
         }
     }

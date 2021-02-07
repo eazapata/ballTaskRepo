@@ -96,7 +96,12 @@ public class BallTask extends JFrame {
 
     }
 
+    /**
+     * Método que recibe una pelota y la añade a la lista, tras esto actualiza las estadisticas.
+     * @param ball objeto pelota que añadiremos a la lista
+     */
     public void addNewBall(Ball ball) {
+        this.statistics.setBall();
         this.balls.add(ball);
 
     }
@@ -115,7 +120,12 @@ public class BallTask extends JFrame {
         return randomValue;
     }
 
+    /**
+     * Método que usamos para eliminar una pelota de la lista y actualizar las estadisdisticas
+     * @param ball
+     */
     public void removeBall(Ball ball) {
+        this.statistics.removeBall();
         this.balls.remove(ball);
 
     }
@@ -172,9 +182,9 @@ public class BallTask extends JFrame {
     private void createBlackHoles() {
         this.blackHoles = new ArrayList<BlackHole>();
         BlackHole blackHole = new BlackHole(this, this.getHeight() / 4, this.getWidth() / 4,
-                400, 175);
+                400, 175,this.statistics);
         BlackHole blackHole1 = new BlackHole(this, this.getHeight() / 2, this.getWidth() / 2,
-                400, 175);
+                400, 175,this.statistics);
         blackHoles.add(blackHole);
         blackHoles.add(blackHole1);
         this.viewer.setBlackHoles(this.blackHoles);
