@@ -46,8 +46,7 @@ public class ClientIdentified implements Runnable {
 
                 if (header.equals("BALLTASK")) {
                     System.out.println("Server: Setting ");
-                    this.channel.setSocket(this.socket);
-                    this.ballTask.setWindow("Server");
+                    this.channel.setSocket(this.socket,"Server");
 
                     DataOutputStream out = new DataOutputStream(this.socket.getOutputStream());
                     out.writeUTF("OK");
