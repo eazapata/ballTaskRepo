@@ -32,10 +32,10 @@ public class HealthChannel implements Runnable {
             int i = 0;
             this.health = false;
             this.channel.sendACK("channel ok?");
-            while (i < 5 && !this.health) {
+            while (i < 10 && !this.health) {
                 i++;
                 try {
-                    Thread.sleep(100);
+                    Thread.sleep(800);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

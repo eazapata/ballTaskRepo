@@ -62,15 +62,13 @@ public class Channel implements Runnable {
      *
      * @param socket
      */
-    public synchronized void setSocket(Socket socket,String who) {
+    public synchronized void setSocket(Socket socket) {
         if (!this.ok) {
             this.ok = true;
             this.socket = socket;
-            this.ballTask.setWindow(who);
             this.channelThread = new Thread(this);
             this.channelThread.start();
             this.healthChannel = new HealthChannel(this);
-            System.out.println("Channel set by "+who);
         }
     }
 
@@ -87,14 +85,8 @@ public class Channel implements Runnable {
         ball.setSize(Integer.parseInt(info[1]));
         ball.setOutSide(true);
         ball.setCordY(Integer.parseInt(info[4]));
-        if(this.ballTask.getWindow().equals("client")){
-            ball.setCordX(ball.getSize() + 10);
-            ball.setVelX(1);
-        }else{
-            ball.setCordX(this.ballTask.getWidth() - ball.getSize()*4);
-            ball.setVelX(-1);
-        }
-
+        ball.setCordX(0);
+        ball.setVelX(Integer.parseInt(info[2]));
         ball.setVelY(Integer.parseInt(info[3]));
         ball.setSleepTime(20);
         ball.setChannel(this);

@@ -48,7 +48,7 @@ public class ClientConnection implements Runnable {
                 DataInputStream in = new DataInputStream(socket.getInputStream());
                 String response = in.readUTF();
                 if (!this.channel.isOk() && response.equals("OK")) {
-                    this.channel.setSocket(socket,"client");
+                    this.channel.setSocket(socket);
                     System.out.println("Conexion establecida");
                 }
           }
