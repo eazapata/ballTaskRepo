@@ -1,4 +1,7 @@
 import javax.swing.*;
+import javax.swing.table.JTableHeader;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -88,6 +91,12 @@ public class ControlPanel extends JPanel implements Runnable, ActionListener {
         c.gridy = 3;
         c.gridwidth = 2;
         c.insets = new Insets(20, 10, 0, 0);
+        JTableHeader header = this.statisticsTable.getTableHeader();
+        TableColumnModel colMod = header.getColumnModel();
+        TableColumn tabCol = colMod.getColumn(0);
+        tabCol.setHeaderValue("Descripción");
+        TableColumn tabCol1 = colMod.getColumn(1);
+        tabCol1.setHeaderValue("Valor");
         this.statisticsTable.getTableHeader().setVisible(true);
         this.add(this.statisticsTable.getTableHeader(), c);
         c.gridy = 4;
@@ -112,14 +121,9 @@ public class ControlPanel extends JPanel implements Runnable, ActionListener {
         this.statisticsTable.setValueAt(statistics.getTotalBalls(), 0, 1);
         this.statisticsTable.setValueAt(statistics.getTotalBalls() - statistics.getInsideBH(), 1, 1);
         this.statisticsTable.setValueAt(statistics.getInsideBH(), 2, 1);
-        int count = 0;
-        for (int i = 0; i < this.ballTask.getBalls().size(); i++) {
-            if (this.ballTask.getBalls().get(i).isStopped()) {
-                count += 0;
-            }
-        }
-        this.statisticsTable.setValueAt(count, 3, 1);
+        this.statisticsTable.setValueAt(statistics.getWaitingBalls(), 3, 1);
     }
+
 
     private void resetBalls() {
         for (int i = 0; i < this.ballTask.getBalls().size(); i++) {

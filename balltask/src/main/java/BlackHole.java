@@ -44,18 +44,21 @@ public class BlackHole implements VisualObject {
 
     //Metodo para añadir una pelota
     public synchronized void putBall(Ball ball) {
-
+        this.statistics.setWaitingBalls();
         while (this.ball != null) {
             try {
                 wait();
+                ball.setStopped(true);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
         this.ball = ball;
         this.statistics.setInsideBH();
+        this.statistics.removeWaitingBalls();
         ball.setSleepTime(50);
         ball.setOutSide(false);
+        ball.setStopped(false);
         notifyAll();
     }
 

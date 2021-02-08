@@ -151,7 +151,7 @@ public class Ball implements Runnable, VisualObject, Serializable {
         int absY = Math.abs(this.getVelY());
 
         if (!this.stopped) {
-            if (action.equals("right") && (this.channel.isOk()) && this.ballTask.getWindow().equals("server")) {
+            if (action.equals("right") && (this.channel.isOk()) && this.ballTask.getWindow().equals("Server")) {
                 this.running = false;
                 System.out.println("enviando pelota " + this.channel.isOk());
                 this.channel.send(this);

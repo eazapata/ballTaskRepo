@@ -76,6 +76,7 @@ public class BallTask extends JFrame {
     //MÉTODOS PÚBLICOS
 
     public void checkMove(Ball ball) {
+
         if (ball.getCordX() - ball.getVelX() <= 0) {
 
             ball.moveBall("left");
@@ -122,6 +123,8 @@ public class BallTask extends JFrame {
 
         return randomValue;
     }
+
+
 
     /**
      * Método que usamos para eliminar una pelota de la lista y actualizar las estadisdisticas
