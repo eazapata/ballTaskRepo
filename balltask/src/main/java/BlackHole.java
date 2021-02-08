@@ -1,5 +1,4 @@
 import java.awt.*;
-import java.util.Random;
 
 public class BlackHole implements VisualObject {
 
@@ -12,7 +11,16 @@ public class BlackHole implements VisualObject {
     private Ball ball;
     private Statistics statistics;
 
-    public BlackHole(BallTask ballTask, int cordY, int cordX, int width, int height, Statistics statistics) {
+    /**
+     * Constructor con parametros del blackhole, recibe las coordenadas en las que se situará, el alto y ancho de este
+     * y las estadisticas donde introducirá información cuando reciba una pelota
+     * @param cordY coordenada de Y
+     * @param cordX coordenada de X
+     * @param width ancho del blackhole
+     * @param height alto del blackhole
+     * @param statistics objeto statistics
+     */
+    public BlackHole(int cordY, int cordX, int width, int height, Statistics statistics) {
         this.width = width;
         this.height = height;
         this.cordY = cordY;
@@ -22,19 +30,15 @@ public class BlackHole implements VisualObject {
         this.color = Color.white;
         this.statistics = statistics;
     }
-
+   //GETTERS Y SETTERS
     public Rectangle getRect() {
         return rect;
     }
 
-    public Ball getBall() {
-        return ball;
-    }
-
-    public void setBall(Ball ball) {
-        this.ball = ball;
-    }
-
+    /**
+     * Método paint que recibe el graphics del viewer
+     * @param g
+     */
     public void paint(Graphics g) {
         g.setColor(this.color);
         g.fillRect(this.cordX, this.cordY, width, height);
@@ -42,13 +46,15 @@ public class BlackHole implements VisualObject {
     }
 
 
-    //Metodo para añadir una pelota
+    /**
+     * Método synchronized que añade una pelota al blackhole y las demás las pone en espera
+     * @param ball pelota que introducimos en el blackhole.
+     */
     public synchronized void putBall(Ball ball) {
         this.statistics.setWaitingBalls();
         while (this.ball != null) {
             try {
                 wait();
-                ball.setStopped(true);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -58,11 +64,13 @@ public class BlackHole implements VisualObject {
         this.statistics.removeWaitingBalls();
         ball.setSleepTime(50);
         ball.setOutSide(false);
-        ball.setStopped(false);
         notifyAll();
     }
 
-    //Metodo para retirar la pelota
+    /**
+     * Méto que usamos para retirar una pelota del blackhole
+     * @param ball pelota que retiramos
+     */
     public synchronized void removeBall(Ball ball) {
         if (this.ball != null) {
             if (ball.equals(this.ball)) {

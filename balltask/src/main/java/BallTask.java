@@ -2,7 +2,6 @@
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Random;
 
 
 public class BallTask extends JFrame {
@@ -43,8 +42,8 @@ public class BallTask extends JFrame {
     public BallTask(String ip) {
         this.setTitle("Original");
         this.channel = new Channel(this);
-        this.serverConnection = new ServerConnection(this.channel,this);
-        this.clientConnection = new ClientConnection(this.channel, ip,this);
+        this.serverConnection = new ServerConnection(this.channel, this);
+        this.clientConnection = new ClientConnection(this.channel, ip, this);
 
         this.dimension = getToolkit().getScreenSize();
         this.setSize(dimension.width, dimension.height);
@@ -125,7 +124,6 @@ public class BallTask extends JFrame {
     }
 
 
-
     /**
      * Método que usamos para eliminar una pelota de la lista y actualizar las estadisdisticas
      *
@@ -183,14 +181,14 @@ public class BallTask extends JFrame {
             balls.add(ball);
             this.statistics.setBall();
         }
-       this.viewer.setBalls(balls);
+        this.viewer.setBalls(balls);
     }
 
     public void createBlackHoles() {
         this.blackHoles = new ArrayList<BlackHole>();
-        BlackHole blackHole = new BlackHole(this, this.getHeight() / 4 - 175, this.getWidth() / 4,
+        BlackHole blackHole = new BlackHole(this.getHeight() / 4 - 175, this.getWidth() / 4,
                 400, 175, this.statistics);
-        BlackHole blackHole1 = new BlackHole(this, this.getHeight() / 2, this.getWidth() / 2 -200,
+        BlackHole blackHole1 = new BlackHole(this.getHeight() / 2, this.getWidth() / 2 - 200,
                 400, 175, this.statistics);
         blackHoles.add(blackHole);
         blackHoles.add(blackHole1);
@@ -198,6 +196,11 @@ public class BallTask extends JFrame {
     }
 
 }
+
+
+
+
+
 
 
 

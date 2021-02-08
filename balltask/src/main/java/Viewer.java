@@ -25,10 +25,6 @@ public class Viewer extends Canvas implements Runnable {
         this.blackHoles = blackHoles;
     }
 
-    public ArrayList<Ball> getBalls() {
-        return balls;
-    }
-
     /**
      * Carga un fondo de pantalla para el viewer
      */

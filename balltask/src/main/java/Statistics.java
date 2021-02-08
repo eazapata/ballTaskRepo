@@ -18,9 +18,6 @@ public class Statistics {
         this.waitingBalls +=1;
     }
 
-    public void setTotal(int total){
-        this.totalBalls = total;
-    }
 
     public int getTotalBalls() {
 

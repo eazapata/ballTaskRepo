@@ -10,7 +10,13 @@ public class Channel implements Runnable {
     private BallTask ballTask;
     private HealthChannel healthChannel;
 
-
+    /**
+     * Constructor que recibe un balltask para poder pasarselo a las pelotas que se crean en esta clase y
+     * para poder añadir y eliminar pelotas del arrayList
+     *
+     * @param ballTask balltask que tiene los métodos de añadir y retirar pelotas, además de los de comprobar la
+     *                 posición de la pelota
+     */
     public Channel(BallTask ballTask) {
         this.ballTask = ballTask;
     }
@@ -46,7 +52,7 @@ public class Channel implements Runnable {
     }
 
     /**
-     * Método para asignar un socket al channel
+     * Método para asignar un socket al channel, si esté ya está setteado no le asigna ningún valor nuevo.
      *
      * @param socket
      */
@@ -56,7 +62,7 @@ public class Channel implements Runnable {
             this.socket = socket;
             this.channelThread = new Thread(this);
             this.channelThread.start();
-            this.healthChannel = new HealthChannel(this, this.socket);
+            this.healthChannel = new HealthChannel(this);
         }
     }
 
@@ -78,7 +84,6 @@ public class Channel implements Runnable {
         ball.setVelX(Integer.parseInt(info[2]));
         ball.setVelY(Integer.parseInt(info[3]));
         ball.setSleepTime(20);
-        ball.setStopped(false);
         ball.setChannel(this);
         ball.setColor(new Color(Integer.parseInt(info[6]), Integer.parseInt(info[7]), Integer.parseInt(info[8])));
         ball.setRect(new Rectangle(ball.getSize(), ball.getSize()));
@@ -88,6 +93,10 @@ public class Channel implements Runnable {
         return ball;
     }
 
+    /**
+     * Método que envia una comprobación de estado para el healthChannel
+     * @param message mensaje que se enviará.
+     */
     public void sendACK(String message) {
         DataOutputStream out = null;
         try {
@@ -101,7 +110,8 @@ public class Channel implements Runnable {
     }
 
     /**
-     * Método para enviar la información relevante de una pelota a través del canal.
+     * Método para enviar la información relevante de una pelota a través del canal. Envia un string separado por comas
+     * con los valores que pueden variar sobre la pelota.
      *
      * @param ball objeto que queremos enviar a través del channel.
      */

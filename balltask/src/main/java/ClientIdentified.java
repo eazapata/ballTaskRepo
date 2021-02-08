@@ -15,6 +15,13 @@ public class ClientIdentified implements Runnable {
         return identifiedThread;
     }
 
+    /**
+     * Contructor que recibe el socket y el channel a settear y un balltask para indicar quien empieza
+     * la conexión.
+     * @param socket socket de la conexión.
+     * @param channel channel por el que se comunicarán cliente y servidor.
+     * @param ballTask balltask que recibirá un string para saber que equipo inicia la conexión
+     */
     public ClientIdentified(Socket socket, Channel channel,BallTask ballTask) {
         this.socket = socket;
         this.channel = channel;

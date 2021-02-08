@@ -14,6 +14,12 @@ public class ControlPanel extends JPanel implements Runnable, ActionListener {
     private Statistics statistics;
     private BallTask ballTask;
 
+    /**
+     * Constructor recibe un balltask para tener acceso a sus listas y poder aplicar las funciones de los botones
+     * sobre estas
+     * @param ballTask objeto propietario de las listas a modificar.
+     * @param statistics estadisticas con la infomación de lo que pasa en el viewer.
+     */
     public ControlPanel(BallTask ballTask, Statistics statistics) {
         this.statistics = statistics;
         this.ballTask = ballTask;
@@ -25,6 +31,10 @@ public class ControlPanel extends JPanel implements Runnable, ActionListener {
         this.threadControlPanel.start();
     }
 
+    /**
+     * Método para formar el control pannel.
+     * @param c Constraints para asignar una posición a todo lo que hay en el panel.
+     */
     public void createPane(GridBagConstraints c) {
 
 
@@ -58,7 +68,7 @@ public class ControlPanel extends JPanel implements Runnable, ActionListener {
         addTableContent(c);
 
     }
-
+    //LISTENER
     public void actionPerformed(ActionEvent actionEvent) {
 
         String event = actionEvent.getActionCommand();
@@ -79,6 +89,10 @@ public class ControlPanel extends JPanel implements Runnable, ActionListener {
         }
     }
 
+    /**
+     * Método para añadir contenido a la tabla
+     * @param c contraints para situarla en el control panel.
+     */
     private void addTableContent(GridBagConstraints c) {
 
         this.statisticsTable = new JTable(4, 2);
@@ -105,18 +119,27 @@ public class ControlPanel extends JPanel implements Runnable, ActionListener {
         this.add(this.statisticsTable, c);
     }
 
+    /**
+     * Método para pausar las pelotas.
+     */
     private void pauseBalls() {
         for (int i = 0; i < this.ballTask.getBalls().size(); i++) {
             this.ballTask.getBalls().get(i).setStopped(true);
         }
     }
 
+    /**
+     * Método para activar las pelotas
+     */
     private void playBalls() {
         for (int i = 0; i < this.ballTask.getBalls().size(); i++) {
             this.ballTask.getBalls().get(i).setStopped(false);
         }
     }
 
+    /**
+     * Método para actualizar las estadisticas.
+     */
     private void refreshStats() {
         this.statisticsTable.setValueAt(statistics.getTotalBalls(), 0, 1);
         this.statisticsTable.setValueAt(statistics.getTotalBalls() - statistics.getInsideBH(), 1, 1);
@@ -124,7 +147,9 @@ public class ControlPanel extends JPanel implements Runnable, ActionListener {
         this.statisticsTable.setValueAt(statistics.getWaitingBalls(), 3, 1);
     }
 
-
+    /**
+     * Método para reinicar las pelotas que hay en el viewer.
+     */
     private void resetBalls() {
         for (int i = 0; i < this.ballTask.getBalls().size(); i++) {
             this.ballTask.getBalls().get(i).setRunning(false);

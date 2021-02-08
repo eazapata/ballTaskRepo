@@ -11,7 +11,13 @@ public class ClientConnection implements Runnable {
     private boolean running = true;
     private BallTask ballTask;
 
-    //CONSTRUCTOR
+    /**
+     * Constructor que recibe el channel por el cual se comunicará con el otro equipo la ip a la que tiene que
+     * conectarse y el balltask para indicar quien inicia la conexión
+     * @param channel objeto a través del cual enviará la información
+     * @param ip ip del equipo remoto a la que se conectará
+     * @param ballTask objeto al que setteara un string para indicar quien incia la conexión.
+     */
 
     public ClientConnection(Channel channel,String ip, BallTask ballTask) {
         this.channel = channel;
@@ -42,7 +48,6 @@ public class ClientConnection implements Runnable {
           }
         } catch (Exception e) {
             System.out.println("Setting socket");
-            //log.error("failed to connect to server", e);
         }
     }
 

@@ -15,6 +15,11 @@ public class ServerConnection implements Runnable {
     private ServerSocket serverSocket;
     private boolean running = true;
 
+    /**
+     * Constructor con paramtros
+     * @param channel canal a settear para inicar la comunicación con el otro equipo
+     * @param ballTask balltask que settara al iniciar la comunicacion.
+     */
     public ServerConnection(Channel channel,BallTask ballTask) {
 
         try {
@@ -55,8 +60,6 @@ public class ServerConnection implements Runnable {
                 System.out.println("Error initial connection" + e);
             }
         }
-
-
     }
 }
 

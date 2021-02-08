@@ -1,6 +1,5 @@
 import java.awt.*;
 import java.io.Serializable;
-import java.util.Random;
 
 
 public class Ball implements Runnable, VisualObject, Serializable {
@@ -20,9 +19,18 @@ public class Ball implements Runnable, VisualObject, Serializable {
     private boolean running;
     private Channel channel;
 
+    /**
+     * Constructor sin parametros para crear una pelota en el channel con la información recibida
+     */
     public Ball() {
     }
 
+    /**
+     * Constructor con parametros que crea una pelota. Recibe un channel para saber como enviarse y un balltask para
+     * acceder a los métodos de comprobar posición.
+     * @param ballTask clase que crea el objeto ball y que contiene el método de comprobar posición.
+     * @param channel clase que tiene el método para enviar la pelota.
+     */
     public Ball(BallTask ballTask, Channel channel) {
         this.ballTask = ballTask;
         this.size = this.ballTask.generateRandomInt(30, 150);
@@ -41,7 +49,7 @@ public class Ball implements Runnable, VisualObject, Serializable {
         ballThread = new Thread(this);
         ballThread.start();
     }
-
+ // GETTERS Y SETTERS
     public Thread getBallThread() {
         return ballThread;
     }
@@ -144,22 +152,22 @@ public class Ball implements Runnable, VisualObject, Serializable {
     }
 
     /**
-     * Método para mover la bola, recibe la acción que le dice que hacer a la pelota
+     * Método para mover la bola, recibe la acción que le dice que hacer a la pelota, está accion la recibe del balltask
      */
     public void moveBall(String action) {
         int absX = Math.abs(this.getVelX());
         int absY = Math.abs(this.getVelY());
 
         if (!this.stopped) {
-            if (action.equals("right") && (this.channel.isOk()) && this.ballTask.getWindow().equals("Server")) {
+            if (action.equals("right") && (this.channel.isOk())){// && this.ballTask.getWindow().equals("Server")) {
                 this.running = false;
                 System.out.println("enviando pelota " + this.channel.isOk());
                 this.channel.send(this);
-            } else if (action.equals("left") && (this.channel.isOk()) && this.ballTask.getWindow().equals("client")) {
+            } /*else if (action.equals("left") && (this.channel.isOk()) && this.ballTask.getWindow().equals("client")) {
                 this.running = false;
                 System.out.println("enviando pelota " + this.channel.isOk());
                 this.channel.send(this);
-            } else if (action.equals("left")) {
+            }*/ else if (action.equals("left")) {
                 this.setVelX(absX);
             } else if (action.equals("right")) {
                 this.setVelX(-absX);
@@ -185,6 +193,9 @@ public class Ball implements Runnable, VisualObject, Serializable {
         }
     }
 
+    /**
+     * Run de la pelota que que comprueba si puede moverse y en que dirección.
+     */
     public void run() {
         this.running = true;
         while (running) {

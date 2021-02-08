@@ -8,17 +8,17 @@ public class HealthChannel implements Runnable {
     private boolean health;
     private Socket socket;
 
-    public HealthChannel(Channel channel, Socket socket) {
+    /**
+     * Contructor con parametros, recibe un channel para poder interactuar con sus atributos.
+     * @param channel objeto el cual se quiere comprobar si está ok para enviar y recibir información
+     */
+    public HealthChannel(Channel channel) {
         this.channel = channel;
-        this.socket = socket;
         Thread healthThread = new Thread(this);
         healthThread.start();
     }
 
-    public boolean isHealth() {
-        return health;
-    }
-
+    //GETTER
     public void setHealth(boolean health) {
         this.health = health;
     }
@@ -39,10 +39,9 @@ public class HealthChannel implements Runnable {
             }
             if (!this.health) {
                 this.channel.setOk(false);
-                System.out.println("Channel cerrado");
+                System.out.println("Channel closed");
                 try {
                     this.channel.getSocket().close();
-                    //this.channel.setSocket(null);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
