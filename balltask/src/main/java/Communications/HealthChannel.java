@@ -13,6 +13,7 @@ public class HealthChannel implements Runnable {
 
     /**
      * Contructor con parametros, recibe un channel para poder interactuar con sus atributos.
+     *
      * @param channel objeto el cual se quiere comprobar si está ok para enviar y recibir información
      */
     public HealthChannel(Channel channel) {
@@ -22,7 +23,7 @@ public class HealthChannel implements Runnable {
     }
 
     //GETTER
-    public void setHealth(boolean health) {
+    public synchronized void setHealth(boolean health) {
         this.health = health;
     }
 
@@ -30,12 +31,12 @@ public class HealthChannel implements Runnable {
     public void run() {
         while (this.channel.isOk()) {
             int i = 0;
-            this.health = false;
+            setHealth(false);
             this.channel.sendACK("channel ok?");
-            while (i < 10 && !this.health) {
+            while (i < 5 && !this.health) {
                 i++;
                 try {
-                    Thread.sleep(800);
+                    Thread.sleep(500);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

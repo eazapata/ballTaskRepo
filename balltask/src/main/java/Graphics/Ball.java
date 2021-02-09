@@ -2,6 +2,7 @@ package Graphics;
 
 import java.awt.*;
 import java.io.Serializable;
+
 import Default.*;
 import Communications.Channel;
 
@@ -32,8 +33,9 @@ public class Ball implements Runnable, VisualObject, Serializable {
     /**
      * Constructor con parametros que crea una pelota. Recibe un channel para saber como enviarse y un balltask para
      * acceder a los métodos de comprobar posición.
+     *
      * @param ballTask clase que crea el objeto ball y que contiene el método de comprobar posición.
-     * @param channel clase que tiene el método para enviar la pelota.
+     * @param channel  clase que tiene el método para enviar la pelota.
      */
     public Ball(BallTask ballTask, Channel channel) {
         this.ballTask = ballTask;
@@ -53,7 +55,8 @@ public class Ball implements Runnable, VisualObject, Serializable {
         ballThread = new Thread(this);
         ballThread.start();
     }
- // GETTERS Y SETTERS
+
+    // GETTERS Y SETTERS
     public Thread getBallThread() {
         return ballThread;
     }
@@ -163,7 +166,7 @@ public class Ball implements Runnable, VisualObject, Serializable {
         int absY = Math.abs(this.getVelY());
 
         if (!this.stopped) {
-            if (action.equals("right") && (this.channel.isOk())) { //TODO && this.ballTask.getWindow().equals("Server")
+            if (action.equals("right") && (this.channel.isOk())) {
                 this.running = false;
                 System.out.println("enviando pelota " + this.channel.isOk());
                 this.channel.send(this);

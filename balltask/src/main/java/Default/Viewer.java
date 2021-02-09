@@ -1,6 +1,5 @@
 package Default;
 
-import Default.BallTask;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -58,13 +57,7 @@ public class Viewer extends Canvas implements Runnable {
             for (int i = 0; i <this.balls.size() ; i++) {
                 this.balls.get(i).paint(g);
             }
-          /*  for (Graphics.Ball ball : this.balls) {
-                ball.paint(g);
-            }
-            this.balls.removeAll(this.ballTask.getToRemove());
-            this.balls.addAll(this.ballTask.getToAdd());
-            this.ballTask.getToRemove().clear();
-            this.ballTask.getToAdd().clear();*/
+
         }
 
         bs.show();

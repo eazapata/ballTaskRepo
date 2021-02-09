@@ -5,6 +5,7 @@ import Default.BallTask;
 import java.awt.*;
 import java.io.*;
 import java.net.Socket;
+
 import Graphics.Ball;
 import Default.BallTask;
 
@@ -100,6 +101,7 @@ public class Channel implements Runnable {
 
     /**
      * Método que envia una comprobación de estado para el healthChannel
+     *
      * @param message mensaje que se enviará.
      */
     public void sendACK(String message) {
@@ -123,7 +125,7 @@ public class Channel implements Runnable {
     public void send(Ball ball) {
         try {
             DataOutputStream writer = new DataOutputStream((this.socket.getOutputStream()));
-            String ballInfo = "BALLTASK" + "," +
+            String ballInfo = "BALL" + "," +
                     ball.getSize() + "," +
                     ball.getVelX() + "," +
                     ball.getVelY() + "," +
@@ -150,17 +152,17 @@ public class Channel implements Runnable {
             String received = null;
             received = reader.readUTF();
 
-            if (received == null) {
-                System.out.println("Content is null");
-                this.ok = false;
-            } else if (received.split(",")[0].equals("BALLTASK")) {
-                Ball ball = createBall(received);
-                this.ballTask.addNewBall(ball);
-            } else if (received.equals("channel ok?")) {
+            if (received.equals("channel ok?")) {
                 DataOutputStream out = new DataOutputStream(this.socket.getOutputStream());
                 out.writeUTF("ok");
             } else if (received.equals("ok")) {
                 this.healthChannel.setHealth(true);
+            } else if (received == null) {
+                System.out.println("Content is null");
+                this.ok = false;
+            } else if (received.split(",")[0].equals("BALL")) {
+                Ball ball = createBall(received);
+                this.ballTask.addNewBall(ball);
             }
 
         } catch (IOException e) {

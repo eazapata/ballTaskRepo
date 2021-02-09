@@ -3,6 +3,7 @@ package Default;
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+
 import Graphics.Ball;
 import Graphics.BlackHole;
 import Communications.*;
@@ -39,6 +40,10 @@ public class BallTask extends JFrame {
 
     public void setWindow(String window) {
         this.window = window;
+    }
+
+    public Viewer getViewer() {
+        return viewer;
     }
 
     /**
@@ -144,23 +149,20 @@ public class BallTask extends JFrame {
 
     private void addControlPanel(GridBagConstraints c) {
         this.controlPanel = new ControlPanel(this, statistics);
-        c.anchor = GridBagConstraints.FIRST_LINE_START;
-        c.fill = GridBagConstraints.VERTICAL;
-        c.gridy = 0;
+        c.anchor = GridBagConstraints.CENTER;
+        c.fill = GridBagConstraints.BOTH;
         c.gridx = 0;
-        c.weighty = 0.5;
-        c.weightx = 0.0;
-        c.gridwidth = 1;
+        c.gridy = 0;
+        c.weightx = 0.1;
+        c.weighty = 1.0;
         this.add(controlPanel, c);
     }
 
     private void addViewer(GridBagConstraints c) {
 
         this.viewer.loadBackground();
-        c.fill = GridBagConstraints.BOTH;
-        c.gridy = 0;
         c.gridx = 1;
-        c.weightx = 1.9;
+        c.weightx = 0.9;
         this.add(this.viewer, c);
         Thread viewerThread = new Thread(this.viewer);
         viewerThread.start();
@@ -190,11 +192,15 @@ public class BallTask extends JFrame {
     }
 
     public void createBlackHoles() {
+        int blackHoleHeight = this.getHeight() / 4;
+        int blackHoleWidth = this.getWidth() / 4;
         this.blackHoles = new ArrayList<BlackHole>();
-        BlackHole blackHole = new BlackHole(this.getHeight() / 4 - 175, this.getWidth() / 4,
-                400, 175, this.statistics);
-        BlackHole blackHole1 = new BlackHole(this.getHeight() / 2, this.getWidth() / 2 - 200,
-                400, 175, this.statistics);
+        BlackHole blackHole = new BlackHole(this.getHeight() / 4,
+                this.getWidth() / 4 -(blackHoleWidth / 2),
+                blackHoleWidth, blackHoleHeight, this.statistics);
+        BlackHole blackHole1 = new BlackHole(this.getHeight() / 2,
+                this.getWidth() / 2,
+                blackHoleWidth, blackHoleHeight, this.statistics);
         blackHoles.add(blackHole);
         blackHoles.add(blackHole1);
         this.viewer.setBlackHoles(this.blackHoles);
